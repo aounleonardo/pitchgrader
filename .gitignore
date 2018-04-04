@@ -1,5 +1,13 @@
+# Python stuff
+*__pycache__*
+
+# Keys
+keys/*
+
 # Mac OS files
 .DS_Store
+.idea
+*.swp
 
 # Logs
 logs

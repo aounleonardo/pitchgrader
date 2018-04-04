@@ -32,7 +32,8 @@ def main(filenames):
         write(processed_data, PROCESSED + os.path.splitext(filename)[0] + JSON)
 
 def read(filename):
-    with open(filename) as file:
+    with open(filename, 'r', encoding='utf-8') as file:
+        print("FILE:", filename)
         data = json.load(file)
         return data
 
@@ -46,22 +47,25 @@ def process(data):
         facility = feature.get(OSM_PROPERTIES).get(OSM_SPORT)
         vertices = feature.get(OSM_GEOMETRY).get(OSM_COORDINATES)
         if verify_polygon(id, facility, vertices):
-            polygon.update({ID: id, FACILITY: facility, VERTICES: vertices})
+            polygon.update({ID: convert_id(id), FACILITY: facility, VERTICES: vertices[0]})
             polygons.append(polygon)
     print("\t{0} are valid polygons".format(len(polygons)))
     return polygons
+
+def convert_id(id):
+    return id.replace('/', '_')
 
 def verify_polygon(id, facility, vertices):
     if id is None or not (id.startswith(WAY) or id.startswith(RELATION)):
         return False
     if facility is None:
         return False
-    if vertices is None:
+    if vertices is None or len(vertices) != 1:
         return False
     return True
 
 def write(data, filename):
-    with open(filename, 'w') as file:
+    with open(filename, 'w', encoding='utf-8') as file:
         json.dump(data, file, indent=None)
 
 if __name__ == '__main__':

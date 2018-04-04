@@ -1,0 +1,23 @@
+{
+  "name": "pitchgrader",
+  "version": "1.0.0",
+  "description": "Project for my Personal Interaction Studio course",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aounleonardo/pitchgrader.git"
+  },
+  "author": "Leonardo Aoun",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/aounleonardo/pitchgrader/issues"
+  },
+  "homepage": "https://github.com/aounleonardo/pitchgrader#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "npm": "^5.7.1"
+  }
+}

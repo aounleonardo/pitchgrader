@@ -1,0 +1,4 @@
+# Ignore the images downloaded
+images/*.png
+images/processed/*.png
+images/raw/*.png
