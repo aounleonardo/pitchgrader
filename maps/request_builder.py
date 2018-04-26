@@ -7,14 +7,13 @@ def read(filename):
         return data
 
 
-def create_requests(polygon):
+def create_requests(polygon, zoom=19):
     api = "https://maps.googleapis.com/maps/api/staticmap"
-    zoom = 19
     size = 640
     scale = 2
     maptype = "satellite"
     coords = build_path(polygon.get("vertices"))
-    key = "AIzaSyCbSK4DpQMnjtBcite62RK80LsPOnRELVg"
+    key = "AIzaSyAVdJziu_D16rP2TIZx3IIAajDlrFBOrE4"
 
     path_color = "0xff8800ff"
     path_weight = 1
