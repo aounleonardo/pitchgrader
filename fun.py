@@ -52,3 +52,9 @@ def crop_images():
     data = read(HOUGHED + "vd_football.json")
     c.crop_all(data)
     print("done cropping")
+
+
+def test_matcher():
+    from maps.matcher import Matchmaker
+    m = Matchmaker()
+    m.test()

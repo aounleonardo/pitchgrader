@@ -6,3 +6,4 @@ images/cropped/*.png
 images/houghed/*.png
 images/rotated/*.png
 masks/*.png
+templates/*.png
