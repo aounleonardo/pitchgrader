@@ -22,7 +22,7 @@ class Cropper:
         for field in data:
             image, hough = self.crop(field)
             cv2.imwrite(CROPPED_IMAGES + field["id"] + EXT, image)
-            cv2.imwrite(CROPPED_IMAGES + field["id"] + HOUGH + EXT, hough)
+            cv2.imwrite(CROPPED_IMAGES + field["id"] + MATCH + EXT, hough)
             print(CURSOR_UP_ONE + ERASE_LINE + "Processed " + field["id"])
 
     def crop(self, field):
@@ -32,14 +32,14 @@ class Cropper:
 
     def crop_football(self, id):
         image = cv2.imread(ROTATED_IMAGES + id + EXT)
-        hough = cv2.imread(HOUGHED_IMAGES + id + EXT)
+        match = cv2.imread(MATCHED_IMAGES + id + EXT)
         ret_image = image[self.football_tl[0]:self.football_br[0], self.football_tl[1]:self.football_br[1]]
-        ret_hough = hough[self.football_tl[0]:self.football_br[0], self.football_tl[1]:self.football_br[1]]
+        ret_hough = match[self.football_tl[0]:self.football_br[0], self.football_tl[1]:self.football_br[1]]
         return ret_image, ret_hough
 
     def crop_tennis(self, id):
         image = cv2.imread(ROTATED_IMAGES + id + EXT)
-        hough = cv2.imread(HOUGHED_IMAGES + id + EXT)
+        match = cv2.imread(MATCHED_IMAGES + id + EXT)
         ret_image = image[self.tennis_tl[0]:self.tennis_br[0], self.tennis_tl[1]:self.tennis_br[1]]
-        ret_hough = hough[self.tennis_tl[0]:self.tennis_br[0], self.tennis_tl[1]:self.tennis_br[1]]
+        ret_hough = match[self.tennis_tl[0]:self.tennis_br[0], self.tennis_tl[1]:self.tennis_br[1]]
         return ret_image, ret_hough

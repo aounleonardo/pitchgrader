@@ -1,0 +1,4 @@
+# Ignore the raw data collected
+raw/*.json
+processed/*.json
+matched/*.json

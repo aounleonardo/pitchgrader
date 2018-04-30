@@ -27,29 +27,30 @@ def rotate_images():
     r.rotate_data("vd_tennis")
 
 
-def grade_images():
+def grade_images(filename):
+    filename = verify_json_in_filename(filename)
+    data = read(PROCESSED + filename)
     from maps.grader import Grader
-    data = read(PROCESSED + "vd_football.json")
     g = Grader()
     new_data = g.grade_data(data)
-    write(new_data, HOUGHED + "vd_football.json")
+    write(new_data, MATCHED + filename)
     print("done grading")
 
 
 def score_images(filename):
     filename = verify_json_in_filename(filename)
-    data = read(HOUGHED + filename)
+    data = read(MATCHED + filename)
     from maps.grader import Grader
     g = Grader()
     new_data = g.score_data(data)
-    new_data = g.colour_data(new_data)
-    write(new_data, HOUGHED + filename)
+    write(new_data, MATCHED + filename)
 
 
-def crop_images():
+def crop_images(filename):
+    filename = verify_json_in_filename(filename)
     from maps.image_cropper import Cropper
     c = Cropper()
-    data = read(HOUGHED + "vd_football.json")
+    data = read(MATCHED + filename)
     c.crop_all(data)
     print("done cropping")
 
@@ -57,4 +58,4 @@ def crop_images():
 def test_matcher():
     from maps.matcher import Matchmaker
     m = Matchmaker()
-    m.test()
+    m.detect_templates([], "tennis")

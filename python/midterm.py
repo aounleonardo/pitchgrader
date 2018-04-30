@@ -70,32 +70,33 @@ def pick(id, sport, width_field, height_field, shrink, pad_ver, pad_hor):
     houghs = np.ones((height_a3, width_a3, 3), dtype=np.uint8)
 
     p = Picker()
-    neighbours = p.choose_neighbours(sport, id, rows=rows + 3)
+    neighbours = p.pick(id, rows + 3, fun="colour", fun_order=p.ASCENDING)
 
     neighbour_row = 0
     row = pad_ver
     for r in range(rows):
         col = pad_hor
-        while len(neighbours[neighbour_row]) < (cols // 2):
+        while neighbour_row < len(neighbours) and len(neighbours[neighbour_row]) < (cols // 2):
             neighbour_row += 1
-        l = neighbours[neighbour_row]
-        for c in range(cols):
-            if c < len(l):
-                nb = l[c]
-                image = cv2.imread(CROPPED_IMAGES + nb["id"] + EXT)
-                hough = cv2.imread(CROPPED_IMAGES + nb["id"] + HOUGH + EXT)
-                image = cv2.resize(image, (width, height))
-                hough = cv2.resize(hough, (width, height))
-                canvas[row: row + height, col: col + width] = image
-                houghs[row: row + height, col: col + width] = hough
-            col += int(shrink * width_field) + pad_hor
-        neighbour_row += 1
-        row += int(shrink * height_field) + pad_ver
+        if neighbour_row < len(neighbours):
+            l = neighbours[neighbour_row]
+            for c in range(cols):
+                if c < len(l):
+                    nb = l[c]
+                    image = cv2.imread(CROPPED_IMAGES + nb["id"] + EXT)
+                    hough = cv2.imread(CROPPED_IMAGES + nb["id"] + MATCH + EXT)
+                    image = cv2.resize(image, (width, height))
+                    hough = cv2.resize(hough, (width, height))
+                    canvas[row: row + height, col: col + width] = image
+                    houghs[row: row + height, col: col + width] = hough
+                col += int(shrink * width_field) + pad_hor
+            neighbour_row += 1
+            row += int(shrink * height_field) + pad_ver
 
     can = cv2.resize(canvas, None, fx=.4, fy=.4)
-    plt.imsave(arr=can, fname=(sport + '_midterm.png'))
+    cv2.imwrite(sport + '_midterm.png', can)
     hoe = cv2.resize(houghs, None, fx=.4, fy=.4)
-    plt.imsave(arr=hoe, fname=(sport + '_houghs.png'))
+    cv2.imwrite(sport + '_macthes.png', hoe)
 
 
 if __name__ == '__main__':

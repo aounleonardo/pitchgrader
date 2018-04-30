@@ -8,11 +8,12 @@ class Converter:
     """
     client = Client()
     _houghed = "osm/data/houghed/"
+    _matched = "osm/data/matched/"
 
     def _read(self, json_file):
         if not json_file.endswith('.json'):
             json_file += '.json'
-        with open(self._houghed + json_file, 'r', encoding='utf-8') as file:
+        with open(self._matched + json_file, 'r', encoding='utf-8') as file:
             data = json.load(file)
             return data
 

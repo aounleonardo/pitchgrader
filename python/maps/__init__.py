@@ -11,7 +11,7 @@ OSM = 'osm/'
 DATA = OSM + 'data/'
 PROCESSED = DATA + 'processed/'
 HOUGHED = DATA + 'houghed/'
-MACTHED = DATA + 'matched/'
+MATCHED = DATA + 'matched/'
 IMAGES = 'maps/images/'
 MASKS = 'maps/masks/'
 PROCESSED_IMAGES = IMAGES + 'processed/'
@@ -19,6 +19,7 @@ ROTATED_IMAGES = IMAGES + 'rotated/'
 HOUGHED_IMAGES = IMAGES + 'houghed/'
 CROPPED_IMAGES = IMAGES + 'cropped/'
 MATCHED_IMAGES = IMAGES + 'matched/'
+MATCH = "_match"
 HOUGH = "_hough"
 
 RAW = IMAGES + 'raw/'
