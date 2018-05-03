@@ -4,10 +4,13 @@
   "scripts": {
     "client": "cd client && yarn start",
     "server": "nodemon server.js",
-    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
+    "database": "mongod --dbpath /usr/local/var/mongodb",
+    "dev": "concurrently --kill-others-on-fail \"yarn database\" \"yarn server\" \"yarn client\""
   },
   "dependencies": {
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "mongodb": "^3.0.7",
+    "mongoose": "^5.0.17"
   },
   "devDependencies": {
     "concurrently": "^3.5.0"

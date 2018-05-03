@@ -13,7 +13,7 @@ tennis: width = 280 --- height = 530 ===> ratio = 1.89 or 0.53
 A2 paper has 1.41 ratio and size in pixels: 4961 x 7016
 A2 paper has 1.41 ratio and size in pixels: 3508 x 4961
 
-so I should resize the height to 787 which means 73% 
+so I should resize the height to 787 which means 73%
 then width would be 679, so I could fit 10 images wide
 """
 
@@ -70,7 +70,7 @@ def pick(id, sport, width_field, height_field, shrink, pad_ver, pad_hor):
     houghs = np.ones((height_a3, width_a3, 3), dtype=np.uint8)
 
     p = Picker()
-    neighbours = p.pick(id, rows + 3, fun="colour", fun_order=p.ASCENDING)
+    neighbours = p.pick(id, rows + 3)
 
     neighbour_row = 0
     row = pad_ver
@@ -100,5 +100,5 @@ def pick(id, sport, width_field, height_field, shrink, pad_ver, pad_hor):
 
 
 if __name__ == '__main__':
-    # football()
+    football()
     tennis(1.2)
