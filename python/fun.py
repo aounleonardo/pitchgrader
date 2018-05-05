@@ -54,6 +54,13 @@ def crop_images(filename):
     c.crop_all(data)
     print("done cropping")
 
+def resize_images(filename):
+    filename = verify_json_in_filename(filename)
+    from maps.image_resizer import Resizer
+    r = Resizer()
+    data = read(MATCHED + filename)
+    r.resize_all(data)
+    print("done resizing")
 
 def test_matcher():
     from maps.matcher import Matchmaker

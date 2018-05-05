@@ -13,8 +13,14 @@ mongoose.connect(dbUrl + dbName).then(() => {
 
 const Football = mongoose.model("Football", new mongoose.Schema(), 'vd_football');
 const Tennis = mongoose.model("Tennis", new mongoose.Schema(), 'vd_tennis');
-const getName = (doc) => doc["_doc"]["id"];
 
+const sports = {
+    "football": Football,
+    "tennis": Tennis,
+    "soccer": Football
+};
+
+const getName = (doc) => doc["_doc"]["id"];
 
 function getLocations(sport, callback) {
     sport.find({}, (err, result) => {
@@ -37,7 +43,7 @@ function getLocations(sport, callback) {
                 lon: center.lon / nbPoints
             });
         }
-        callback(ret[0]);
+        callback(ret);
     });
 }
 
@@ -59,9 +65,15 @@ module.exports = {
     football: Football,
     tennis: Tennis,
     router: router,
-    getLocations: getLocations,
 };
 
 router.get('/', (req, res) => {
     res.send('Welcome to the database');
+});
+
+router.get('/locations/:sport', (req, res) => {
+    const sport = sports[req.params["sport"]];
+    getLocations(sport, (points) => {
+        res.send(points);
+    })
 });

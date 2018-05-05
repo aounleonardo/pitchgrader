@@ -19,6 +19,7 @@ ROTATED_IMAGES = IMAGES + 'rotated/'
 HOUGHED_IMAGES = IMAGES + 'houghed/'
 CROPPED_IMAGES = IMAGES + 'cropped/'
 MATCHED_IMAGES = IMAGES + 'matched/'
+RESIZED_IMAGES = IMAGES + 'resized/'
 MATCH = "_match"
 HOUGH = "_hough"
 
@@ -59,7 +60,7 @@ def verify_json_in_args(args):
 def verify_json_in_filename(filename):
     if not filename.endswith('.json'):
         filename += JSON
-    json_files = [os.path.basename(f) for f in glob.glob(HOUGHED + "*" + JSON)]
+    json_files = [os.path.basename(f) for f in glob.glob(MATCHED + "*" + JSON)]
     if not filename in json_files:
         raise Exception("this json file doesn't exists")
     return filename
