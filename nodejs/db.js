@@ -22,13 +22,14 @@ const sports = {
 
 const getName = (doc) => doc["_doc"]["id"];
 
-function getLocations(sport, callback) {
-    sport.find({}, (err, result) => {
+function getLocations(sport, callback, filters = {}) {
+    sport.find(filters, (err, result) => {
         if (err) throw err;
-        let len = result.length;
-        // for(field of result){
-        const ret = [];
+        const locations = [];
+        let minScore = Number.MAX_VALUE;
+        let maxScore = Number.MIN_VALUE;
         for (let field of result) {
+            // Get Locations
             const vertices = field.get("vertices");
             const id = field.get("_id");
             const nbPoints = vertices.length;
@@ -37,12 +38,22 @@ function getLocations(sport, callback) {
                 const lat = (total.lat + coordinate[1]);
                 return {lat: lat, lon: lon};
             }, {lat: 0, lon: 0});
-            ret.push({
+            locations.push({
                 id: id,
                 lat: center.lat / nbPoints,
                 lon: center.lon / nbPoints
             });
+
+            // Get Score
+            const score = field.get("score");
+            minScore = Math.min(minScore, score);
+            maxScore = Math.max(maxScore, score);
         }
+        const ret = {
+            locations: locations,
+            minScore: minScore,
+            maxScore: maxScore
+        };
         callback(ret);
     });
 }
@@ -76,4 +87,24 @@ router.get('/locations/:sport', (req, res) => {
     getLocations(sport, (points) => {
         res.send(points);
     })
+});
+
+router.get('/locations/:sport/range/:from/:to', (req, res) => {
+    const sport = sports[req.params.sport];
+    const from = parseFloat(req.params.from);
+    const to = parseFloat(req.params.to);
+
+    if (sport == null || from == null || isNaN(from) || to == null || isNaN(to)) {
+        res.send("err");
+    }
+
+    const filters = {
+        "score": {
+            "$gte": from,
+            "$lte": to
+        }
+    };
+    getLocations(sport, (points) => {
+        res.send(points);
+    }, filters)
 });

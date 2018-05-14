@@ -3,6 +3,7 @@ import Switch from "react-switch";
 import {Grid, Row, Label} from 'react-bootstrap';
 
 import 'rc-slider/assets/index.css';
+
 const Slider = require('rc-slider');
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
@@ -11,19 +12,26 @@ export default class Controller extends Component {
     constructor(props) {
         super(props);
         this.map = props.map;
+        this.scale = props.scale;
         this.state = {
             checked: props.checked,
             sport: chooseSport(props.checked),
-            minScore: 0,
-            maxScore: 20,
-            value: [0, 20]
+            sliderValue: [0, props.scale],
+            scoreValue: [0, props.scale],
         };
         this.handleSportChange = this.handleSportChange.bind(this);
-        this.handleScoreChange = this.handleScoreChange.bind(this);
     }
 
-    componentDidUpdate() {
-        this.map.current.getSport(this.state.sport);
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.sport !== this.state.sport) {
+            this.state.sliderValue = [0, this.scale];
+            this.map.current.getSport(this.state.sport);
+        } else if (prevState.scoreValue !== this.scoreValue) {
+            this.map.current.getSportInRange(this.state.sport, {
+                min: this.state.scoreValue[0],
+                max: this.state.scoreValue[1],
+            }, this.scale)
+        }
     }
 
     render() {
@@ -40,8 +48,10 @@ export default class Controller extends Component {
                         <Label bsStyle="success">Football</Label>
                     </h3>
                 </Row>
-                <Row style={{ width: 300, paddingTop: 50 }}>
-                    <Range min={this.state.minScore} max={this.state.maxScore} defaultValue={[0, 20]} onAfterChange={this.handleScoreChange}/>
+                <Row style={{width: 300, paddingTop: 50}}>
+                    <Range min={0} max={this.scale} value={this.state.sliderValue} defaultValue={[0, this.scale]}
+                           onChange={(value) => this.setState({sliderValue: value})}
+                           onAfterChange={(value) => this.setState({scoreValue: value, sliderValue: value})}/>
                 </Row>
             </Grid>
         );
@@ -49,13 +59,9 @@ export default class Controller extends Component {
 
     handleSportChange(checked) {
         const sport = chooseSport(checked);
-        this.setState({checked: checked, sport: sport});
+        this.setState({checked: checked, sport: sport, sliderValue: [0, this.scale]});
     }
 
-
-    handleScoreChange(value) {
-        this.setState({value: value});
-    }
 }
 
 function chooseSport(checked) {

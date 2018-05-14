@@ -27,7 +27,7 @@ class App extends Component {
                         <Map ref={this.map}/>
                     </Col>
                     <Col xs={4}>
-                        <Controller map={this.map} checked={true}/>
+                        <Controller map={this.map} checked={true} scale={100}/>
                     </Col>
                 </Row>
             </Grid>

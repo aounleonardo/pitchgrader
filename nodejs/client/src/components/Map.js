@@ -28,7 +28,21 @@ export default class Map extends Component {
     getSport(sport) {
         this.getPoints(sport)
             .then(res => {
-                this.setState({features: res});
+                this.setState({
+                    features: res.locations,
+                    minScore: res.minScore,
+                    maxScore: res.maxScore,
+                });
+            })
+            .catch(err => console.log(err));
+    }
+
+    getSportInRange(sport, grades, scale) {
+        this.getPointsInScoreRange(sport, grades, scale)
+            .then(res => {
+                this.setState({
+                    features: res.locations,
+                });
             })
             .catch(err => console.log(err));
     }
@@ -56,8 +70,20 @@ export default class Map extends Component {
         );
     }
 
-    getPoints = async (sport) => {
-        const response = await fetch('/db/locations/' + sport);
+    getPoints = (sport) => this.contactServerWith('/db/locations/' + sport);
+
+    getPointsInScoreRange = (sport, grades, scale) => {
+        const scoreRange = this.state.maxScore - this.state.minScore;
+        const minScore = (grades.min / scale) * scoreRange + this.state.minScore;
+        const maxScore = (grades.max / scale) * scoreRange + this.state.minScore;
+        const request = `/db/locations/${sport}/range/${minScore}/${maxScore}`;
+        return this.contactServerWith(request)
+    };
+
+
+    contactServerWith = async (request) => {
+        const response = await fetch(request);
+
         const body = await response.json();
 
         if (response.status !== 200) throw Error(body.message);
