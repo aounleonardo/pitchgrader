@@ -13,7 +13,7 @@ class App extends Component {
     constructor(props){
         super(props);
 
-        this.map = <Map ref={element => this.map = element}/>
+        this.map = React.createRef();
     }
 
     render() {
@@ -24,10 +24,10 @@ class App extends Component {
                 </Row>
                 <Row>
                     <Col xs={12} md={8}>
-                        {this.map}
+                        <Map ref={this.map}/>
                     </Col>
                     <Col xs={4}>
-                        <Controller/>
+                        <Controller map={this.map} checked={true}/>
                     </Col>
                 </Row>
             </Grid>

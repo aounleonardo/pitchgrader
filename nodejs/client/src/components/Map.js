@@ -7,6 +7,9 @@ export default class Map extends Component {
     constructor(props) {
         super(props);
 
+        this.center = [6.5668, 46.5191];
+        this.zoom = [15];
+
         this.state = {
             features: [],
         };
@@ -19,9 +22,12 @@ export default class Map extends Component {
     }
 
     componentDidMount() {
-        this.getPoints("football")
+        this.getSport("football");
+    }
+
+    getSport(sport) {
+        this.getPoints(sport)
             .then(res => {
-                console.log(res.length);
                 this.setState({features: res});
             })
             .catch(err => console.log(err));
@@ -31,21 +37,23 @@ export default class Map extends Component {
         return (
             // mapbox://styles/mapbox/streets-v9
             // mapbox://styles/aounleonardo/cjgthx50a002f2rp5soeptwab
-            <this.mapbox style="mapbox://styles/aounleonardo/cjgthx50a002f2rp5soeptwab"
-                         center={[6.5668, 46.5191]}
-                         zoom={[15]}
-                // longitude, latitude
-                         maxBounds={[[5.75, 46], [7.5, 47]]}
-                         containerStyle={{
-                             height: "80vh",
-                             width: "40vw"
-                         }}>
-                <Layer type="symbol" id="marker" layout={{"icon-image": "marker-15"}}>
-                    {this.state.features.map((feature) => <Feature
-                        coordinates={[feature.lon, feature.lat]}
-                        key={feature.id}/>)}
-                </Layer>
-            </this.mapbox>);
+            <div>
+                <this.mapbox style="mapbox://styles/aounleonardo/cjgthx50a002f2rp5soeptwab"
+                             center={this.center}
+                             zoom={this.zoom}
+                    // longitude, latitude
+                             maxBounds={[[5.75, 46], [7.5, 47]]}
+                             containerStyle={{
+                                 height: "80vh"
+                             }}>
+                    <Layer type="symbol" id="marker" layout={{"icon-image": "marker-15"}}>
+                        {this.state.features.map((feature) => <Feature
+                            coordinates={[feature.lon, feature.lat]}
+                            key={feature.id}/>)}
+                    </Layer>
+                </this.mapbox>
+            </div>
+        );
     }
 
     getPoints = async (sport) => {

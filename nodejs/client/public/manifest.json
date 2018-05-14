@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Pitchgrader",
+  "name": "Grading sport pitches in Vaud",
   "icons": [
     {
       "src": "favicon.ico",
