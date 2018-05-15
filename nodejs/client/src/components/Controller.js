@@ -51,10 +51,20 @@ export default class Controller extends Component {
                 <Row style={{width: 300, paddingTop: 50}}>
                     <Range min={0} max={this.scale} value={this.state.sliderValue} defaultValue={[0, this.scale]}
                            onChange={(value) => this.setState({sliderValue: value})}
-                           onAfterChange={(value) => this.setState({scoreValue: value, sliderValue: value})}/>
+                           onAfterChange={(value) => this.setState({scoreValue: value, sliderValue: value})}
+                           trackStyle={this.trackStyle()} handleStyle={this.handleStyle()}/>
                 </Row>
             </Grid>
         );
+    }
+
+
+    trackStyle() {
+        return (this.state.sport === "football") ? [{backgroundColor: '#3adf5a'}] : [{backgroundColor: '#e1ab25'}]
+    }
+
+    handleStyle() {
+        return (this.state.sport === "football") ? [{backgroundColor: '#2e7a3d'}] : [{backgroundColor: '#7d5c20'}]
     }
 
     handleSportChange(checked) {

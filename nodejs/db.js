@@ -5,6 +5,7 @@ const router = require('express').Router({});
 const dbUrl = "mongodb://localhost:27017/";
 const dbName = "pitchgrader";
 
+const fs = require('fs');
 
 mongoose.connect(dbUrl + dbName).then(() => {
     console.log("Connected to db");
@@ -40,6 +41,7 @@ function getLocations(sport, callback, filters = {}) {
             }, {lat: 0, lon: 0});
             locations.push({
                 id: id,
+                sport: field.get("facility"),
                 lat: center.lat / nbPoints,
                 lon: center.lon / nbPoints
             });
@@ -62,6 +64,13 @@ function gradesForId(sport, id, callback) {
     fieldById(sport, id, (err, field) => {
         const ret = (err || !field) ? {} : field.get("grades");
         callback(ret);
+    });
+}
+
+function filenameForId(sport, id, callback) {
+    fieldById(sport, id, (err, field) => {
+        const filename = (err || !field) ? null : getName(field);
+        callback(filename);
     });
 }
 
@@ -108,3 +117,29 @@ router.get('/locations/:sport/range/:from/:to', (req, res) => {
         res.send(points);
     }, filters)
 });
+
+router.get('/images/:filename', (req, res) => {
+    const path = `res/fields/${req.params.filename}.png`;
+    fs.readFile(path, (err, data) => {
+        if (err) throw err;
+        res.contentType('png');
+        res.end(data, 'binary');
+    });
+});
+
+router.get('/images/:sport/:id', (req, res) => {
+    filenameForId(sports[req.params.sport], req.params.id, (filename) => {
+        if(!filename){
+            res.send("");
+        } else {
+            const path = `res/fields/${filename}.png`;
+            fs.readFile(path, (err, data) => {
+                if (err) throw err;
+                res.contentType('png');
+                res.end(data, 'binary');
+            });
+        }
+    });
+});
+
+

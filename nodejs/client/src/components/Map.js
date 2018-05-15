@@ -14,6 +14,8 @@ export default class Map extends Component {
             features: [],
         };
 
+        this.featureClick = props.featureClick;
+
         this.mapbox = ReactMapboxGl({
             accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
             minZoom: 10,
@@ -63,6 +65,11 @@ export default class Map extends Component {
                     <Layer type="symbol" id="marker" layout={{"icon-image": "marker-15"}}>
                         {this.state.features.map((feature) => <Feature
                             coordinates={[feature.lon, feature.lat]}
+                            // onClick={() => this.featureClick(this.state.sport, feature.id)}
+                            onClick={() => {
+                                console.log("hello");
+                                this.featureClick(feature.sport, feature.id)
+                            }}
                             key={feature.id}/>)}
                     </Layer>
                 </this.mapbox>
