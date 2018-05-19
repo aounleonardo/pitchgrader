@@ -38,9 +38,7 @@ export default class Inspector extends Component {
     }
 
     render() {
-        return (<div>
-            <img src={this.state.image}/>
-        </div>);
+        return (<img src={this.state.image} height={this.props.height}/>);
     }
 
     getImage = async (sport, field) => {

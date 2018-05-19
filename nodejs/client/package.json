@@ -14,7 +14,8 @@
     "react-dom": "^16.3.2",
     "react-mapbox-gl": "^3.8.0",
     "react-scripts": "1.1.4",
-    "react-switch": "^2.3.2"
+    "react-switch": "^2.3.2",
+    "with-query": "^1.0.2"
   },
   "scripts": {
     "start": "react-scripts start",

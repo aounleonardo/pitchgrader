@@ -6676,7 +6676,7 @@ qs@6.5.1:
   version "6.5.1"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.1.tgz#349cdf6eef89ec45c12d7d5eb3fc0c870343a6d8"
 
-qs@~6.5.1:
+qs@^6.4.0, qs@~6.5.1:
   version "6.5.2"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
 
@@ -8783,6 +8783,13 @@ widest-line@^2.0.0:
 window-size@0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/window-size/-/window-size-0.1.0.tgz#5438cd2ea93b202efa3a19fe8887aee7c94f9c9d"
+
+with-query@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/with-query/-/with-query-1.0.2.tgz#8c068c556142aca762d1642e2141a52548479c4a"
+  dependencies:
+    object-assign "^4.1.1"
+    qs "^6.4.0"
 
 wordwrap@0.0.2:
   version "0.0.2"

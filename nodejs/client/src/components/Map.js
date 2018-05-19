@@ -60,7 +60,7 @@ export default class Map extends Component {
                     // longitude, latitude
                              maxBounds={[[5.75, 46], [7.5, 47]]}
                              containerStyle={{
-                                 height: "80vh"
+                                 height: "60vh"
                              }}>
                     <Layer type="symbol" id="marker" layout={{"icon-image": "marker-15"}}>
                         {this.state.features.map((feature) => <Feature

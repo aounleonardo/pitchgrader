@@ -21,6 +21,8 @@ const sports = {
     "soccer": Football
 };
 
+const criteria = ["_full", "_frame", "_center", "_top", "_bot", "_hue", "_std"];
+
 const getName = (doc) => doc["_doc"]["id"];
 
 function getLocations(sport, callback, filters = {}) {
@@ -58,6 +60,43 @@ function getLocations(sport, callback, filters = {}) {
         };
         callback(ret);
     });
+}
+
+function similarFields(sport, id, coefficients, callback) {
+    gradesForId(sport, id, (grades) => {
+        sport.find({}, (err, result) => {
+            if (err) throw err;
+            const gradedFields = result.map((field) => {
+                return {
+                    id: field.get("_id"),
+                    grades: field.get("grades")
+                }
+            });
+            const sorted = gradedFields.sort((fieldA, fieldB) => {
+                const similitudeA = similitude(grades, fieldA.grades);
+                const similitudeB = similitude(grades, fieldB.grades);
+                const gradeA = gradeField(similitudeA, coefficients);
+                const gradeB = gradeField(similitudeB, coefficients);
+
+                return gradeA - gradeB;
+            });
+
+            callback(sorted);
+        });
+    });
+}
+
+function similitude(gradesA, gradesB) {
+    return Object.keys(gradesA).reduce((ret, grade) => {
+        ret[grade] = Math.abs(gradesA[grade] - gradesB[grade]);
+        return ret
+    }, {});
+}
+
+function gradeField(field, coefficients) {
+    return Object.keys(field).reduce((ret, grade) => {
+        return ret + (field[grade] * coefficients[grade]);
+    }, 0.0);
 }
 
 function gradesForId(sport, id, callback) {
@@ -126,6 +165,23 @@ router.get('/images/:filename', (req, res) => {
         res.end(data, 'binary');
     });
 });
+
+router.get('/similar/:sport/:id', (req, res) => {
+    const sport = sports[req.params.sport];
+    const id = req.params.id;
+    const coefficients = buildCoefficients(req.query);
+    similarFields(sport, id, coefficients, (ret) => {
+        res.send(ret);
+    })
+});
+
+function buildCoefficients(query) {
+    return criteria.reduce((ret, criterion) => {
+        const grade = parseFloat(query[criterion.substring(1)]);
+        ret[criterion] = (grade)? grade : 0.0;
+        return ret;
+    }, {});
+}
 
 router.get('/images/:sport/:id', (req, res) => {
     filenameForId(sports[req.params.sport], req.params.id, (filename) => {
