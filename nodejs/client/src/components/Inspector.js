@@ -2,9 +2,7 @@ import React, {Component} from 'react';
 
 export default class Inspector extends Component {
     constructor(props) {
-        // console.log("constructing new inspector: ", props.sport, props.field);
         super(props);
-
         this.state = {
             sport: props.sport,
             field: props.field,
@@ -18,15 +16,12 @@ export default class Inspector extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        console.log("should component update?", nextProps.field, this.props.field);
         const res = nextProps.field !== this.props.field
             || (nextState.image !== this.state.image && (this.state.field !== nextState.field));
-        console.log(res);
         return res
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.log("inspectorDidUpdate");
         this.getImage(this.props.sport, this.props.field)
             .then(res => {
                 this.setState({
@@ -48,7 +43,6 @@ export default class Inspector extends Component {
 
         const blob = await response.blob();
         const url = await URL.createObjectURL(blob);
-        console.log(url);
 
         return url;
     };

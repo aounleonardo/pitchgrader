@@ -1,20 +1,8 @@
 import React, {Component} from 'react';
 import Inspector from "./Inspector";
 
-import {Row, Col} from 'react-bootstrap';
-
 const waiting = <div>Waiting...</div>;
 export default class Belt extends Component {
-
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            similar: props.similar,
-            sport: props.sport
-        }
-
-    }
 
     render() {
         if (!this.props.similar || this.props.similar.length < 2) {

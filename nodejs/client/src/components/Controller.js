@@ -24,7 +24,6 @@ export default class Controller extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (prevState.sport !== this.state.sport) {
-            this.state.sliderValue = [0, this.scale];
             this.map.current.getSport(this.state.sport);
         } else if (prevState.scoreValue !== this.scoreValue) {
             this.map.current.getSportInRange(this.state.sport, {

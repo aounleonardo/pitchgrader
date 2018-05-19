@@ -53,9 +53,9 @@ class App extends Component {
         );
     }
 
-    featureClick(sport, field) {
+    featureClick(sport, field, inFields) {
         this.showField(sport, field);
-        this.findSimilar(sport, field);
+        this.findSimilar(sport, field, inFields);
     }
 
     showField(sport, field) {
@@ -65,17 +65,16 @@ class App extends Component {
         });
     }
 
-    findSimilar(sport, field) {
+    findSimilar(sport, field, inFields) {
         fetch(withQuery(`/db/similar/${sport}/${field}`, {
             "full": 1.0
         }))
             .then(res => {
                 return res.json();
             })
-            .then(json => {
-                console.log(json);
+            .then(fields => {
                 this.setState({
-                    similar: json,
+                    similar: fields.filter(f => inFields.includes(f.id)),
                 });
             })
             .catch(err => {
