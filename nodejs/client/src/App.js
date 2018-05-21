@@ -19,7 +19,7 @@ class App extends Component {
 
         this.state = {
             inspectorSport: "football",
-            inspectorField: "5aea19c87441f44e24e27a8e",
+            inspectorField: "-",
         };
 
         this.map = React.createRef();
@@ -27,6 +27,7 @@ class App extends Component {
         this.featureClick = this.featureClick.bind(this);
         this.showField = this.showField.bind(this);
         this.findSimilar = this.findSimilar.bind(this);
+        this.imageClick = this.imageClick.bind(this);
     }
 
     render() {
@@ -43,11 +44,13 @@ class App extends Component {
                         <Row><Controller map={this.map} checked={true} scale={100}/></Row>
                         <Row><Inspector sport={this.state.inspectorSport}
                                         field={this.state.inspectorField}
-                                        height={400}/></Row>
+                                        height={400}
+                                        handleClick={this.imageClick}/>
+                        </Row>
                     </Col>
                 </Row>
                 <Row>
-                    <Belt sport={this.state.inspectorSport} similar={this.state.similar} count={6}/>
+                    <Belt sport={this.state.inspectorSport} similar={this.state.similar} count={6} imageClick={this.imageClick}/>
                 </Row>
             </Grid>
         );
@@ -63,6 +66,11 @@ class App extends Component {
             inspectorSport: sport,
             inspectorField: field
         });
+    }
+
+    imageClick(field) {
+        console.log("click", field);
+        this.map.current.flyToField(field);
     }
 
     findSimilar(sport, field, inFields) {

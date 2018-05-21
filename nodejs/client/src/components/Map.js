@@ -7,11 +7,12 @@ export default class Map extends Component {
     constructor(props) {
         super(props);
 
-        this.center = [6.5668, 46.5191];
+        // this.center = [6.5668, 46.5191];
         this.zoom = [15];
 
         this.state = {
             features: [],
+            center: [6.5668, 46.5191],
         };
 
         this.featureClick = props.featureClick;
@@ -21,6 +22,8 @@ export default class Map extends Component {
             minZoom: 10,
             maxZoom: 20
         });
+
+        this.flyToField = this.flyToField.bind(this);
     }
 
     componentDidMount() {
@@ -49,13 +52,22 @@ export default class Map extends Component {
             .catch(err => console.log(err));
     }
 
+    flyToField(field) {
+        const found = this.state.features.find((feature) => {
+            return feature.id === field;
+        });
+        if(found) {
+            this.setState({center: [found.lon, found.lat]})
+        }
+    }
+
     render() {
         return (
             // mapbox://styles/mapbox/streets-v9
             // mapbox://styles/aounleonardo/cjgthx50a002f2rp5soeptwab
             <div>
                 <this.mapbox style="mapbox://styles/aounleonardo/cjgthx50a002f2rp5soeptwab"
-                             center={this.center}
+                             center={this.state.center}
                              zoom={this.zoom}
                     // longitude, latitude
                              maxBounds={[[5.75, 46], [7.5, 47]]}
