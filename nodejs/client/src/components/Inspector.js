@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {Image, Grid} from 'react-bootstrap';
+import {Image, Grid, Row} from 'react-bootstrap';
 
 export default class Inspector extends Component {
     constructor(props) {
@@ -16,8 +16,7 @@ export default class Inspector extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        const res = nextProps.field !== this.props.field || nextState.image !== this.state.image;
-        return res
+        return nextProps.field !== this.props.field || nextState.image !== this.state.image;
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -35,9 +34,11 @@ export default class Inspector extends Component {
 
     render() {
         return (
-            /*<Grid>*/
-            <Image src={this.state.image} height={this.props.height} onClick={this.handleClick}/>
-            // </Grid>
+            <Grid>
+                <Row>
+                    <Image src={this.state.image} height={this.props.height} onClick={this.handleClick} rounded/>
+                </Row>
+            </Grid>
         );
     }
 

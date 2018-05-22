@@ -18,8 +18,8 @@ class App extends Component {
         super(props);
 
         this.state = {
-            inspectorSport: "football",
-            inspectorField: "-",
+            chosenSport: "football",
+            chosenId: "-",
         };
 
         this.map = React.createRef();
@@ -33,7 +33,7 @@ class App extends Component {
     render() {
         return (
             <Grid>
-                <Row bsClass='my-row'>
+                <Row>
                     <h1><Label bsStyle="success">Pitchgrader</Label></h1>
                 </Row>
                 <Row>
@@ -42,34 +42,38 @@ class App extends Component {
                     </Col>
                     <Col xs={4}>
                         <Row><Controller map={this.map} checked={true} scale={100}/></Row>
-                        <Row><Inspector sport={this.state.inspectorSport}
-                                        field={this.state.inspectorField}
-                                        height={400}
+                        <Row><Inspector sport={this.state.chosenSport}
+                                        field={this.state.chosenId}
+                                        height={300}
                                         handleClick={this.imageClick}/>
                         </Row>
                     </Col>
                 </Row>
                 <Row>
-                    <Belt sport={this.state.inspectorSport} similar={this.state.similar} count={6} imageClick={this.imageClick}/>
+                    <Belt sport={this.state.chosenSport} center={this.state.chosenCoordinates}
+                          similar={this.state.similar} count={6} imageClick={this.imageClick} maxDistance={5}/>
                 </Row>
             </Grid>
         );
     }
 
-    featureClick(sport, field, inFields) {
-        this.showField(sport, field);
-        this.findSimilar(sport, field, inFields);
+    featureClick(field, inFields) {
+        this.showField(field);
+        this.findSimilar(field.sport, field.id, inFields);
     }
 
-    showField(sport, field) {
+    showField(field) {
         this.setState({
-            inspectorSport: sport,
-            inspectorField: field
+            chosenSport: field.sport,
+            chosenId: field.id,
+            chosenCoordinates: {
+                latitude: field.latitude,
+                longitude: field.longitude
+            },
         });
     }
 
     imageClick(field) {
-        console.log("click", field);
         this.map.current.flyToField(field);
     }
 
@@ -82,7 +86,17 @@ class App extends Component {
             })
             .then(fields => {
                 this.setState({
-                    similar: fields.filter(f => inFields.includes(f.id)),
+                    similar: fields.filter(f => {
+                        return inFields.find(feature => feature.id === f.id)
+                    }).map(f => {
+                        const feature = inFields.find(feature => feature.id === f.id);
+                        return {
+                            id: f.id,
+                            grades: f.grades,
+                            longitude: feature.longitude,
+                            latitude: feature.latitude
+                        }
+                    }),
                 });
             })
             .catch(err => {

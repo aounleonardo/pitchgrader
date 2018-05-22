@@ -56,8 +56,8 @@ export default class Map extends Component {
         const found = this.state.features.find((feature) => {
             return feature.id === field;
         });
-        if(found) {
-            this.setState({center: [found.lon, found.lat]})
+        if (found) {
+            this.setState({center: [found.longitude, found.latitude]})
         }
     }
 
@@ -72,17 +72,15 @@ export default class Map extends Component {
                     // longitude, latitude
                              maxBounds={[[5.75, 46], [7.5, 47]]}
                              containerStyle={{
-                                 height: "60vh"
+                                 height: "60vh",
+                                 borderRadius: 10
                              }}>
                     <Layer type="symbol" id="marker" layout={{"icon-image": "marker-15"}}>
                         {this.state.features.map((feature) => <Feature
-                            coordinates={[feature.lon, feature.lat]}
+                            coordinates={[feature.longitude, feature.latitude]}
                             onClick={() => {
-                                this.featureClick(feature.sport, feature.id,
-                                    this.state.features.reduce((ret, feature) => {
-                                        ret.push(feature.id);
-                                        return ret;
-                                    }, []))
+                                this.featureClick(feature,
+                                    this.state.features)
                             }}
                             onMouseEnter={(mapWithEvt) => {
                             }}

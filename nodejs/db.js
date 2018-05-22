@@ -44,8 +44,8 @@ function getLocations(sport, callback, filters = {}) {
             locations.push({
                 id: id,
                 sport: field.get("facility"),
-                lat: center.lat / nbPoints,
-                lon: center.lon / nbPoints
+                latitude: center.lat / nbPoints,
+                longitude: center.lon / nbPoints
             });
 
             // Get Score
@@ -69,7 +69,7 @@ function similarFields(sport, id, coefficients, callback) {
             const gradedFields = result.map((field) => {
                 return {
                     id: field.get("_id"),
-                    grades: field.get("grades")
+                    grades: field.get("grades"),
                 }
             });
             const sorted = gradedFields.sort((fieldA, fieldB) => {
