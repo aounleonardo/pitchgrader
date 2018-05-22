@@ -45,7 +45,8 @@ function getLocations(sport, callback, filters = {}) {
                 id: id,
                 sport: field.get("facility"),
                 latitude: center.lat / nbPoints,
-                longitude: center.lon / nbPoints
+                longitude: center.lon / nbPoints,
+                grades: field.get("grades"),
             });
 
             // Get Score

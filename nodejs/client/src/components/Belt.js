@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Inspector from "./Inspector";
 
 import {Grid, Row, Col, Label} from 'react-bootstrap';
+import BeltController from "./BeltController";
 
 const Slider = require('rc-slider');
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
@@ -69,7 +70,10 @@ export default class Belt extends Component {
                                    })}
                             />
                         </Row>
-
+                        <Row>
+                            <BeltController onCoefficientsChange={this.props.onCoefficientsChange} full={1} frame={0}
+                                            center={0} top={0} bot={0}/>
+                        </Row>
                     </Col>
                     <Col md={10}>
                         {this.state.filtered.slice(1, length + 1).map((neighbour) =>

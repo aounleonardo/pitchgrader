@@ -8,6 +8,7 @@ import Map from './components/Map'
 import Controller from "./components/Controller";
 import Inspector from "./components/Inspector";
 import Belt from "./components/Belt";
+import GradeViewer from "./components/GradeViewer";
 
 import withQuery from 'with-query';
 
@@ -22,12 +23,21 @@ class App extends Component {
             chosenId: "-",
         };
 
+        this.sortingCoefficients = {
+            full: 1,
+            frame: 0,
+            center: 0,
+            bot: 0,
+            top: 0,
+        };
+
         this.map = React.createRef();
 
         this.featureClick = this.featureClick.bind(this);
         this.showField = this.showField.bind(this);
         this.findSimilar = this.findSimilar.bind(this);
         this.imageClick = this.imageClick.bind(this);
+        this.onCoefficientsChange = this.onCoefficientsChange.bind(this);
     }
 
     render() {
@@ -47,14 +57,24 @@ class App extends Component {
                                         height={300}
                                         handleClick={this.imageClick}/>
                         </Row>
+                        <Row>
+                            <GradeViewer grades={this.state.chosenGrades}/>
+                        </Row>
                     </Col>
                 </Row>
                 <Row>
                     <Belt sport={this.state.chosenSport} center={this.state.chosenCoordinates}
-                          similar={this.state.similar} count={6} imageClick={this.imageClick} maxDistance={5}/>
+                          similar={this.state.similar} count={6} imageClick={this.imageClick} maxDistance={5}
+                          onCoefficientsChange={this.onCoefficientsChange}
+                    />
                 </Row>
             </Grid>
         );
+    }
+
+    onCoefficientsChange(coefficients) {
+        this.sortingCoefficients = coefficients;
+
     }
 
     featureClick(field, inFields) {
@@ -70,6 +90,13 @@ class App extends Component {
                 latitude: field.latitude,
                 longitude: field.longitude
             },
+            chosenGrades: {
+                full: field.grades["_full"],
+                frame: field.grades["_frame"],
+                center: field.grades["_center"],
+                top: field.grades["_top"],
+                bot: field.grades["_bot"],
+            },
         });
     }
 
@@ -79,7 +106,11 @@ class App extends Component {
 
     findSimilar(sport, field, inFields) {
         fetch(withQuery(`/db/similar/${sport}/${field}`, {
-            "full": 1.0
+            "full": this.sortingCoefficients.full,
+            "frame": this.sortingCoefficients.frame,
+            "center": this.sortingCoefficients.center,
+            "top": this.sortingCoefficients.top,
+            "bot": this.sortingCoefficients.bot,
         }))
             .then(res => {
                 return res.json();
