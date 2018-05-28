@@ -8,7 +8,7 @@ export default class Map extends Component {
         super(props);
 
         // this.center = [6.5668, 46.5191];
-        this.zoom = [15];
+        this.zoom = [9];
 
         this.state = {
             features: [],
@@ -19,7 +19,7 @@ export default class Map extends Component {
 
         this.mapbox = ReactMapboxGl({
             accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
-            minZoom: 10,
+            minZoom: 9,
             maxZoom: 20
         });
 
