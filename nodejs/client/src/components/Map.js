@@ -23,11 +23,14 @@ export default class Map extends Component {
             maxZoom: 20
         });
 
+        this.markers = this.populateMarkers(props.markerSize);
+        console.log(this.markers);
+
         this.flyToField = this.flyToField.bind(this);
     }
 
     componentDidMount() {
-        this.getSport("football");
+        this.getSport(this.props.sport);
     }
 
     getSport(sport) {
@@ -62,6 +65,8 @@ export default class Map extends Component {
     }
 
     render() {
+        const image = new Image(20, 20);
+        image.src = '/images/marker.png';
         return (
             // mapbox://styles/mapbox/streets-v9
             // mapbox://styles/aounleonardo/cjgthx50a002f2rp5soeptwab
@@ -75,7 +80,7 @@ export default class Map extends Component {
                                  height: "60vh",
                                  borderRadius: 10
                              }}>
-                    <Layer type="symbol" id="marker" layout={{"icon-image": "marker-15"}}>
+                    <Layer type="symbol" id="marker" layout={{"icon-image": "marker"}} images={["marker", image]}>
                         {this.state.features.map((feature) => <Feature
                             coordinates={[feature.longitude, feature.latitude]}
                             onClick={() => {
@@ -101,6 +106,19 @@ export default class Map extends Component {
         const maxScore = (grades.max / scale) * scoreRange + this.state.minScore;
         const request = `/db/locations/${sport}/range/${minScore}/${maxScore}`;
         return this.contactServerWith(request)
+    };
+
+    populateMarkers = (size) => {
+        return ["football", "tennis", "selected", "highlighted"].reduce((ret, name) => {
+            ret[name] = this.createMarker(size, name);
+            return ret;
+        }, {});
+    };
+
+    createMarker = (size, name) => {
+        const marker = new Image(size, size);
+        marker.src = `/images/markers/${name}.png`;
+        return marker;
     };
 
 

@@ -12,6 +12,12 @@ import GradeViewer from "./components/GradeViewer";
 
 import withQuery from 'with-query';
 
+const sports = {
+    "football": "football",
+    "soccer": "football",
+    "tennis": "tennis",
+};
+
 
 class App extends Component {
 
@@ -47,10 +53,10 @@ class App extends Component {
                     <h1><Label bsStyle="success">Pitchgrader</Label></h1>
                 </Row>
                 <Row>
-                    <Col xs={12} md={8}>
-                        <Map ref={this.map} featureClick={this.featureClick}/>
+                    <Col xs={12} md={9}>
+                        <Map ref={this.map} featureClick={this.featureClick} sport={"football"} markerSize={20}/>
                     </Col>
-                    <Col xs={4}>
+                    <Col xs={3}>
                         <Row><Controller map={this.map} checked={true} scale={100}/></Row>
                         <Row><Inspector sport={this.state.chosenSport}
                                         field={this.state.chosenId}
@@ -84,7 +90,7 @@ class App extends Component {
 
     showField(field) {
         this.setState({
-            chosenSport: field.sport,
+            chosenSport: sports[field.sport],
             chosenId: field.id,
             chosenCoordinates: {
                 latitude: field.latitude,

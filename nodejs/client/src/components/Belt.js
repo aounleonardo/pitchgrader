@@ -54,36 +54,34 @@ export default class Belt extends Component {
         const length = Math.min(this.state.filtered.length - 1, this.props.count);
         return (
             <Grid>
-                <Row><h2><Label bsStyle="success">Similar Fields:</Label></h2></Row>
-                <Row>
-                    <Col md={2}>
-                        <Row>
-                            <Label>Distance</Label>
-                        </Row>
-                        <Row>
-                            <Range min={0} max={this.props.maxDistance} value={this.state.sliderValue}
-                                   defaultValue={[0, this.props.maxDistance]} step={0.1}
-                                   onChange={(value) => this.setState({sliderValue: value})}
-                                   onAfterChange={(value) => this.setState({
-                                       minDistance: value[0],
-                                       maxDistance: value[1]
-                                   })}
-                            />
-                        </Row>
-                        <Row>
-                            <BeltController onCoefficientsChange={this.props.onCoefficientsChange} full={1} frame={0}
-                                            center={0} top={0} bot={0}/>
-                        </Row>
-                    </Col>
-                    <Col md={10}>
-                        {this.state.filtered.slice(1, length + 1).map((neighbour) =>
-                            <Col md={2} xs={6} key={"belt-" + neighbour.id}>
-                                <Inspector sport={this.props.sport} field={neighbour.id}
-                                           height={200} handleClick={this.props.imageClick}/>
-                            </Col>
-                        )}
-                    </Col>
-                </Row>
+                <Col md={9}>
+                    <Row><h2><Label bsStyle="success">Similar Fields:</Label></h2></Row>
+                    {this.state.filtered.slice(1, length + 1).map((neighbour) =>
+                        <Col md={2} xs={6} key={"belt-" + neighbour.id}>
+                            <Inspector sport={this.props.sport} field={neighbour.id}
+                                       height={150} handleClick={this.props.imageClick}/>
+                        </Col>
+                    )}
+                </Col>
+                <Col md={3}>
+                    <Row>
+                        <Label>Distance</Label>
+                    </Row>
+                    <Row>
+                        <Range min={0} max={this.props.maxDistance} value={this.state.sliderValue}
+                               defaultValue={[0, this.props.maxDistance]} step={0.1}
+                               onChange={(value) => this.setState({sliderValue: value})}
+                               onAfterChange={(value) => this.setState({
+                                   minDistance: value[0],
+                                   maxDistance: value[1]
+                               })}
+                        />
+                    </Row>
+                    <Row>
+                        <BeltController onCoefficientsChange={this.props.onCoefficientsChange} sport={this.props.sport} full={1} frame={0}
+                                        center={0} top={0} bot={0}/>
+                    </Row>
+                </Col>
             </Grid>
         );
     }
