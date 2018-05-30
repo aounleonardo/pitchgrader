@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
 import './App.css';
+import './components/components.css';
 
 import {Grid, Row, Col, Label} from 'react-bootstrap';
 
@@ -26,7 +27,7 @@ class App extends Component {
 
         this.state = {
             chosenSport: "football",
-            chosenId: "-",
+            chosenId:  "-",// "5aea19c87441f44e24e27a72",
         };
 
         this.sortingCoefficients = {
@@ -35,6 +36,7 @@ class App extends Component {
             center: 0,
             bot: 0,
             top: 0,
+            hue: 0,
         };
 
         this.map = React.createRef();
@@ -44,20 +46,22 @@ class App extends Component {
         this.findSimilar = this.findSimilar.bind(this);
         this.imageClick = this.imageClick.bind(this);
         this.onCoefficientsChange = this.onCoefficientsChange.bind(this);
+        this.sportChange = this.sportChange.bind(this);
     }
 
     render() {
+        const labelClass = (this.state.chosenSport === "tennis") ? "label tennis-label" : "label football-label";
         return (
-            <Grid>
+            <Grid bsClass={"container pitchgrader"}>
                 <Row>
-                    <h1><Label bsStyle="success">Pitchgrader</Label></h1>
+                    <h1><Label bsClass={labelClass}>Pitchgrader</Label></h1>
                 </Row>
                 <Row>
                     <Col xs={12} md={9}>
-                        <Map ref={this.map} featureClick={this.featureClick} sport={"football"} markerSize={20}/>
+                        <Map ref={this.map} featureClick={this.featureClick} sport={this.state.chosenSport} markerSize={20} initialZoom={13}/>
                     </Col>
                     <Col xs={3}>
-                        <Row><Controller map={this.map} checked={true} scale={100}/></Row>
+                        <Row><Controller map={this.map} checked={true} scale={100} sport={this.state.chosenSport} sportChange={this.sportChange}/></Row>
                         <Row><Inspector sport={this.state.chosenSport}
                                         field={this.state.chosenId}
                                         height={300}
@@ -69,7 +73,7 @@ class App extends Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Belt sport={this.state.chosenSport} center={this.state.chosenCoordinates}
+                    <Belt map={this.map} sport={this.state.chosenSport} center={this.state.chosenCoordinates}
                           similar={this.state.similar} count={6} imageClick={this.imageClick} maxDistance={5}
                           onCoefficientsChange={this.onCoefficientsChange}
                     />
@@ -88,6 +92,12 @@ class App extends Component {
         this.findSimilar(field.sport, field.id, inFields);
     }
 
+    sportChange(sport) {
+        this.setState({
+            chosenSport: sport,
+        });
+    };
+
     showField(field) {
         this.setState({
             chosenSport: sports[field.sport],
@@ -102,6 +112,7 @@ class App extends Component {
                 center: field.grades["_center"],
                 top: field.grades["_top"],
                 bot: field.grades["_bot"],
+                std: field.grades["_std"],
             },
         });
     }
@@ -117,6 +128,7 @@ class App extends Component {
             "center": this.sortingCoefficients.center,
             "top": this.sortingCoefficients.top,
             "bot": this.sortingCoefficients.bot,
+            "hue": this.sortingCoefficients.hue,
         }))
             .then(res => {
                 return res.json();
@@ -130,6 +142,7 @@ class App extends Component {
                         return {
                             id: f.id,
                             grades: f.grades,
+                            sport: f.sport,
                             longitude: feature.longitude,
                             latitude: feature.latitude
                         }

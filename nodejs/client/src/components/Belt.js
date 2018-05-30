@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import Inspector from "./Inspector";
 
-import {Grid, Row, Col, Label} from 'react-bootstrap';
+import {Row, Col, Label} from 'react-bootstrap';
 import BeltController from "./BeltController";
+
+import './components.css'
 
 const Slider = require('rc-slider');
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
@@ -13,7 +15,6 @@ export default class Belt extends Component {
 
     constructor(props) {
         super(props);
-
         this.state = {
             // maxDistance: props.maxDistance,
             minDistance: 0,
@@ -40,6 +41,11 @@ export default class Belt extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+        if (prevState.filtered !== this.state.filtered) {
+            const length = Math.min(this.state.filtered.length - 1, this.props.count);
+            const selected = this.state.filtered.slice(0, length + 1);
+            this.props.map.current.setSelectedFeatures(selected);
+        }
         if (this.state.maxDistance !== prevState.maxDistance || this.state.minDistance !== prevState.minDistance) {
             this.setState({
                 filtered: this.keepCloseNeighbours()
@@ -52,10 +58,11 @@ export default class Belt extends Component {
             return waiting;
         }
         const length = Math.min(this.state.filtered.length - 1, this.props.count);
+        const labelClass = (this.props.sport === "tennis") ? "label tennis-label" : "label football-label";
         return (
-            <Grid>
+        <Col>
                 <Col md={9}>
-                    <Row><h2><Label bsStyle="success">Similar Fields:</Label></h2></Row>
+                    <Row><h2><Label bsClass={labelClass}>Similar Fields:</Label></h2></Row>
                     {this.state.filtered.slice(1, length + 1).map((neighbour) =>
                         <Col md={2} xs={6} key={"belt-" + neighbour.id}>
                             <Inspector sport={this.props.sport} field={neighbour.id}
@@ -78,11 +85,12 @@ export default class Belt extends Component {
                         />
                     </Row>
                     <Row>
-                        <BeltController onCoefficientsChange={this.props.onCoefficientsChange} sport={this.props.sport} full={1} frame={0}
-                                        center={0} top={0} bot={0}/>
+                        <BeltController onCoefficientsChange={this.props.onCoefficientsChange} sport={this.props.sport}
+                                        full={1} frame={0}
+                                        center={0} top={0} bot={0} hue={0}/>
                     </Row>
                 </Col>
-            </Grid>
+            </Col>
         );
     }
 

@@ -14,13 +14,15 @@ export default class BeltController extends Component {
             center: props.center,
             bot: props.bot,
             top: props.top,
+            hue: props.hue,
             sport: props.sport,
             imageName: props.sport
         };
 
 
         this.sliderWillChange = (name) => {
-            const imageName = `${this.props.sport}_${name}`;
+            const prepend = (name.length > 0) ? `_${name}` : ""
+            const imageName = `${this.props.sport}${prepend}`;
             this.setState({imageName: imageName});
         };
 
@@ -40,6 +42,7 @@ export default class BeltController extends Component {
             center: this.state.center,
             top: this.state.top,
             bot: this.state.bot,
+            hue: this.state.hue,
         });
     }
 
@@ -78,6 +81,10 @@ export default class BeltController extends Component {
                 <Row>
                     <Label>Bot</Label>
                     <GradeSlider name={"bot"} defaultValue={this.state.bot} onBeforeChange={this.sliderWillChange} onAfterChange={this.sliderChanged} color="#f0f"/>
+                </Row>
+                <Row>
+                    <Label>Color</Label>
+                    <GradeSlider name={"hue"} defaultValue={this.state.bot} onBeforeChange={this.sliderWillChange} onAfterChange={this.sliderChanged} color="#fff"/>
                 </Row>
             </Col>
         </Col>);

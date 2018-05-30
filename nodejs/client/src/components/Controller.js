@@ -1,12 +1,17 @@
 import React, {Component} from 'react';
+import {Row, Col, Label} from 'react-bootstrap';
+
 import Switch from "react-switch";
-import {Grid, Row, Label} from 'react-bootstrap';
 
 import 'rc-slider/assets/index.css';
+import './components.css';
 
 const Slider = require('rc-slider');
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
+
+
+// Be sure to include styles at some point, probably during your bootstrapping
 
 export default class Controller extends Component {
     constructor(props) {
@@ -23,9 +28,7 @@ export default class Controller extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (prevState.sport !== this.state.sport) {
-            this.map.current.getSport(this.state.sport);
-        } else if (prevState.scoreValue !== this.scoreValue) {
+        if (prevState.scoreValue !== this.state.scoreValue) {
             this.map.current.getSportInRange(this.state.sport, {
                 min: this.state.scoreValue[0],
                 max: this.state.scoreValue[1],
@@ -34,41 +37,51 @@ export default class Controller extends Component {
     }
 
     render() {
+        const isTennis = this.state.sport === "tennis";
+        const labelTennis = (isTennis) ? "label tennis-label" : "label";
+        const labelFootball = (!isTennis) ? "label football-label" : "label";
+        const labelClass = (isTennis) ? "label tennis-label" : "label football-label";
         return (
-            <Grid>
+            <Col >
                 <Row>
-                    <h3><Label bsStyle="warning">Tennis</Label>
-                        <Switch onChange={this.handleSportChange}
-                                checked={this.state.checked}
-                                id="sport-switch"
-                                checkedIcon={false}
-                                uncheckedIcon={false}
-                                offColor={"#e1ab25"}/>
-                        <Label bsStyle="success">Football</Label>
-                    </h3>
+                    <Col md={4}><h3><Label bsClass={labelTennis}>Tennis</Label></h3></Col>
+                    <Col md={4}>
+                        <div><Switch onChange={this.handleSportChange}
+                                     checked={this.state.checked}
+                                     id="sport-switch"
+                                     checkedIcon={false}
+                                     uncheckedIcon={false}
+                                     onColor={"#61b530"}
+                                     className="tare2a-switch"
+                                     offColor={"#ed511d"}
+                        /></div>
+                    </Col>
+                    <Col md={4}><h3><Label bsClass={labelFootball}>Football</Label></h3></Col>
                 </Row>
-                <Row style={{width: 300, paddingTop: 50}}>
+                <Row style={{width: 300, paddingLeft: 20}}>
+                    <h3><Label bsClass={labelClass}>Score Interval</Label></h3>
                     <Range min={0} max={this.scale} value={this.state.sliderValue} defaultValue={[0, this.scale]}
                            onChange={(value) => this.setState({sliderValue: value})}
                            onAfterChange={(value) => this.setState({scoreValue: value, sliderValue: value})}
                            trackStyle={this.trackStyle()} handleStyle={this.handleStyle()}/>
                 </Row>
-            </Grid>
+            </Col>
         );
     }
 
 
     trackStyle() {
-        return (this.state.sport === "football") ? [{backgroundColor: '#3adf5a'}] : [{backgroundColor: '#e1ab25'}]
+        return (this.state.sport === "football") ? [{backgroundColor: "#61b530"}] : [{backgroundColor: "#ed511d"}]
     }
 
     handleStyle() {
-        return (this.state.sport === "football") ? [{backgroundColor: '#2e7a3d'}] : [{backgroundColor: '#7d5c20'}]
+        return (this.state.sport === "football") ? [{backgroundColor: "#3a751f"}] : [{backgroundColor: "#863317"}]
     }
 
     handleSportChange(checked) {
         const sport = chooseSport(checked);
         this.setState({checked: checked, sport: sport, sliderValue: [0, this.scale]});
+        this.props.sportChange(sport);
     }
 
 }

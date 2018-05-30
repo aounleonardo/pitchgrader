@@ -5,6 +5,7 @@ import GradeSlider from './GradeSlider';
 export default class GradeViewer extends Component {
     render() {
         const grades = this.props.grades;
+        const std = (grades != null && grades.std != null) ? 1 - 10000 * grades.std : 0;
         const divSplit = 3;
         return (grades) ?
             <Col>
@@ -46,6 +47,14 @@ export default class GradeViewer extends Component {
                     </Col>
                     <Col md={12 - divSplit}>
                         <GradeSlider defaultValue={grades.bot} fixed={true} color={"#f0f"}/>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col md={divSplit}>
+                        <Label>Color</Label>
+                    </Col>
+                    <Col md={12 - divSplit}>
+                        <GradeSlider defaultValue={std} fixed={true} color={"#fff"}/>
                     </Col>
                 </Row>
             </Col>
