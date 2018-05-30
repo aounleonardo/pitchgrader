@@ -28,6 +28,7 @@ class App extends Component {
         this.state = {
             chosenSport: "football",
             chosenId:  "-",// "5aea19c87441f44e24e27a72",
+            similar: [],
         };
 
         this.sortingCoefficients = {
@@ -142,7 +143,7 @@ class App extends Component {
                         return {
                             id: f.id,
                             grades: f.grades,
-                            sport: f.sport,
+                            sport: feature.sport,
                             longitude: feature.longitude,
                             latitude: feature.latitude
                         }
