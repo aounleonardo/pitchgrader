@@ -1,6 +1,11 @@
 # Pitchgrader
 Project for the Personal Interaction Studio course of Spring 2018 at EPFL.
 
+EPFL | Media & Design Lab | Personal Interaction Studio 2018
+Course Tutors:
+Immanuel Koh 
+Jeffrey Huang  
+
 ## Directory Structure
 The two main folders of the application contain:
 - The [Python code](python/) responsible of preprocessing the data
